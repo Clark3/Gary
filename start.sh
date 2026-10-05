@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-ROOT="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+ROOT="$(cd -- "$(dirname -- "$0")" && pwd)"
 export PYTHONPATH="$ROOT/src${PYTHONPATH:+:$PYTHONPATH}"
 python3 "$ROOT/src/gary/cli.py" status
 if ! command -v llama-server >/dev/null 2>&1; then
