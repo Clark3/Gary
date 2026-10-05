@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-PROJECT_ROOT="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+PROJECT_ROOT="$(cd -- "$(dirname -- "$0")" && pwd)"
 INSTALL=0
 while [ "$#" -gt 0 ]; do
   case "$1" in
@@ -13,7 +13,9 @@ while [ "$#" -gt 0 ]; do
 done
 have() { command -v "$1" >/dev/null 2>&1; }
 OS_ID=unknown; OS_VERSION=unknown
-if [ -r /etc/os-release ]; then . /etc/os-release; OS_ID="${ID:-unknown}"; OS_VERSION="${VERSION_ID:-unknown}"; fi
+if [ -r /etc/os-release ]; then
+  # shellcheck source=/etc/os-release
+  . /etc/os-release; OS_ID="${ID:-unknown}"; OS_VERSION="${VERSION_ID:-unknown}"; fi
 PKG=""
 if have apt-get; then PKG=apt-get; elif have dnf; then PKG=dnf; elif have pacman; then PKG=pacman; elif have zypper; then PKG=zypper; elif have apk; then PKG=apk; fi
 printf 'Gary bootstrap\nHost: %s %s (%s)\nPackage manager: %s\n' "$OS_ID" "$OS_VERSION" "$(uname -m)" "${PKG:-none detected}"
