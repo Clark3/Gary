@@ -12,14 +12,36 @@ while [ "$#" -gt 0 ]; do
   shift
 done
 have() { command -v "$1" >/dev/null 2>&1; }
-OS_ID=unknown; OS_VERSION=unknown
+OS_ID=unknown
+OS_VERSION=unknown
 if [ -r /etc/os-release ]; then
-  # shellcheck source=/etc/os-release
-  . /etc/os-release; OS_ID="${ID:-unknown}"; OS_VERSION="${VERSION_ID:-unknown}"; fi
+  # shellcheck disable=SC1091
+  . /etc/os-release
+  OS_ID="${ID:-unknown}"
+  OS_VERSION="${VERSION_ID:-unknown}"
+fi
 PKG=""
-if have apt-get; then PKG=apt-get; elif have dnf; then PKG=dnf; elif have pacman; then PKG=pacman; elif have zypper; then PKG=zypper; elif have apk; then PKG=apk; fi
-printf 'Gary bootstrap\nHost: %s %s (%s)\nPackage manager: %s\n' "$OS_ID" "$OS_VERSION" "$(uname -m)" "${PKG:-none detected}"
-missing=(); for cmd in python3 git; do if ! have "$cmd"; then missing+=("$cmd"); fi; done
+if have apt-get; then
+  PKG=apt-get
+elif have dnf; then
+  PKG=dnf
+elif have pacman; then
+  PKG=pacman
+elif have zypper; then
+  PKG=zypper
+elif have apk; then
+  PKG=apk
+fi
+printf 'Gary bootstrap
+Host: %s %s (%s)
+Package manager: %s
+' "$OS_ID" "$OS_VERSION" "$(uname -m)" "${PKG:-none detected}"
+missing=()
+for cmd in python3 git; do
+  if ! have "$cmd"; then
+    missing+=("$cmd")
+  fi
+done
 if [ "$INSTALL" -eq 1 ] && [ "${#missing[@]}" -gt 0 ]; then
   case "$PKG" in
     apt-get) sudo apt-get update && sudo apt-get install -y "${missing[@]}" ;;
@@ -30,7 +52,11 @@ if [ "$INSTALL" -eq 1 ] && [ "${#missing[@]}" -gt 0 ]; then
     *) echo "No supported package manager; install ${missing[*]} manually." >&2; exit 1 ;;
   esac
 fi
-if [ "${#missing[@]}" -gt 0 ] && [ "$INSTALL" -eq 0 ]; then echo "Missing baseline prerequisites: ${missing[*]}"; echo "Run './bootstrap.sh --install'."; exit 1; fi
+if [ "${#missing[@]}" -gt 0 ] && [ "$INSTALL" -eq 0 ]; then
+  echo "Missing baseline prerequisites: ${missing[*]}"
+  echo "Run './bootstrap.sh --install'."
+  exit 1
+fi
 mkdir -p "${XDG_STATE_HOME:-$HOME/.local/state}/gary" "${XDG_BIN_HOME:-$HOME/.local/bin}"
 WRAPPER="${XDG_BIN_HOME:-$HOME/.local/bin}/gary"
 cat > "$WRAPPER" <<EOF
@@ -50,4 +76,5 @@ Icon=utilities-terminal
 Terminal=true
 Categories=System;Utility;
 EOF
-printf 'Bootstrap complete. Gary command: %s\n' "$WRAPPER"
+printf 'Bootstrap complete. Gary command: %s
+' "$WRAPPER"
