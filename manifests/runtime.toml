@@ -1,0 +1,17 @@
+# Gary runtime contract
+
+[core]
+python = "required"
+git = "required"
+
+[open_interpreter]
+required = true
+capabilities = ["interactive_agent", "tool_execution", "approval_policy", "provider_selection"]
+
+[llama_cpp]
+required = true
+capabilities = ["health_api", "model_list", "model_load", "model_unload", "openai_compatible_chat"]
+
+[podman]
+required = false
+capabilities = ["rootless_container", "image_pull", "disposable_rehearsal"]

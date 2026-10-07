@@ -1,0 +1,32 @@
+# Secrets / credentials
+.env
+*.key
+*.pem
+*.p12
+credentials/
+secrets/
+
+# Host runtime / models / caches
+runtime/
+models/
+.cache/
+*.gguf
+*.gguf.*
+*.safetensors
+
+# Host-local transient state
+state/
+logs/
+tmp/
+
+# Python/node caches
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+node_modules/
+.pytest_cache/
+
+# OS/editor
+.DS_Store
+*.swp
