@@ -46,7 +46,7 @@ if [ "$INSTALL" -eq 1 ] && [ "${#missing[@]}" -gt 0 ]; then
   case "$PKG" in
     apt-get) sudo apt-get update && sudo apt-get install -y "${missing[@]}" ;;
     dnf) sudo dnf install -y "${missing[@]}" ;;
-    pacman) sudo pacman -Sy --needed --noconfirm "${missing[@]}" ;;
+    pacman) sudo pacman -S --needed --noconfirm "${missing[@]}" ;;
     zypper) sudo zypper --non-interactive install "${missing[@]}" ;;
     apk) sudo apk add "${missing[@]}" ;;
     *) echo "No supported package manager; install ${missing[*]} manually." >&2; exit 1 ;;
