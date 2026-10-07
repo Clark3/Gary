@@ -8,6 +8,9 @@ version = "0.2.0"
 description = "Gary: a portable, local-first Linux system-administration agent"
 requires-python = ">=3.10"
 
+[project.scripts]
+gary = "gary.cli:main"
+
 [tool.setuptools]
 package-dir = {"" = "src"}
 
